@@ -10,8 +10,8 @@ read -s -p "Re-enter Password: " password2
 echo
 done
 
-read -p "Azure VM Zone (default: westus2): " vmzoneinput
-vmzone=${vmzoneinput:=westus2}
+read -p "Azure VM Zone (default: northcentralus): " vmzoneinput
+vmzone=${vmzoneinput:=northcentralus}
 
 az group create --name $vmname -l $vmzone
 
@@ -21,8 +21,8 @@ echo "Creating Azure Data Science VM $vmname..."
 az vm create --name $vmname -g $vmname --image microsoft-dsvm:ubuntu-1804:1804:latest  --priority Low --size Standard_NC6 --eviction-policy Deallocate --storage-sku StandardSSD_LRS --admin-user fastuser --admin-password $password
 az vm open-port --name $vmname -g $vmname --port 8000
 
-echo "Installing  fastai v2 and notebooks..."
-az vm extension set --resource-group $vmname --vm-name $vmname --name customScript --publisher Microsoft.Azure.Extensions --protected-settings '{"fileUris": ["https://raw.githubusercontent.com/Azure/DataScienceVM/master/Samples/fastai2/installfastai2.sh"],"commandToExecute": "./installfastai2.sh"}'
+#echo "Installing  fastai v2 and notebooks..."
+#az vm extension set --resource-group $vmname --vm-name $vmname --name customScript --publisher Microsoft.Azure.Extensions --protected-settings '{"fileUris": ["https://raw.githubusercontent.com/nkleinbaer/DataScienceVM/main/Samples/fastai2/installfastai2.sh"],"commandToExecute": "./installfastai2.sh"}'
 IP=$(az vm show -d -g ${vmname} --name ${vmname} --query publicIps -o tsv)
 
 echo "You can now login to VM with SSH or use Jupyterhub by visiting https://${IP}:8000/ (Ignore self signed cert warnings)"
